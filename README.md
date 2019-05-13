@@ -1,0 +1,2 @@
+# shop
+Notores Shop Module
