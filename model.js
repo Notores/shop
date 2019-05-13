@@ -1,6 +1,6 @@
 const {MongoSchema, getModule} = require('@notores/core');
 const {Schema} = require('mongoose');
-const SharedModels = getModule('notores-shared-models');
+const SharedModels = getModule('@notores/shared-models');
 const Address = SharedModels.models.Address;
 
 const orderSchema = new Schema(
