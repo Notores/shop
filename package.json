@@ -1,5 +1,5 @@
 {
-  "name": "notores-shop",
+  "name": "@notores/shop",
   "main": "index.js",
   "authors": [
     "Renzo Roso <renzo@geex.company>",
@@ -8,8 +8,8 @@
   "version": "0.1.0",
   "peerDependencies": {
     "mongoose": "^5.4.11",
-    "notores": "^0.2.0",
-    "notores-product": "^0.1.0",
-    "notores-payment": "^1.0.0"
+    "@notores/core": "^0.2.0",
+    "@notores/product": "^0.1.0",
+    "@notores/payment": "^1.0.0"
   }
 }
