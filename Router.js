@@ -60,12 +60,12 @@ class ShopRouter {
             }
         }
 
-        res.locals.themePage = 'cart';
+        res.locals.page = 'cart';
         next();
     }
 
     static async renderCartSummary(req, res, next) {
-        res.locals.themePage = '../statics/cart-summary';
+        res.locals.page = '../statics/cart-summary';
         res.locals.cart = req.session.cart;
         next();
     }
