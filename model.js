@@ -1,12 +1,9 @@
-const {MongoSchema, getModule} = require('@notores/core');
+const {MongoSchema} = require('@notores/core');
 const {Schema} = require('mongoose');
-const SharedModels = getModule('@notores/shared-models');
-const Address = SharedModels.models.Address;
 
-const orderSchema = new Schema(
-    {
-        invoiceAddress: {type: Address.schema, required: true},
-        shippingAddress: {type: Address.schema, required: false},
+const Order = new MongoSchema('Order', {
+        invoiceAddress: {type: MongoSchema.Types.ObjectId, ref: 'Address', required: true},
+        shippingAddress: {type: MongoSchema.Types.ObjectId, ref: 'Address', required: false},
         products: [{
             id: {type: Schema.Types.ObjectId, ref: 'Product', required: true},
             title: {type: String, required: true},
@@ -24,7 +21,7 @@ const orderSchema = new Schema(
     }
 );
 
-orderSchema.statics.generateOrderProduct = (product) => {
+Order.statics.generateOrderProduct = (product) => {
     return {
         id: product.id,
         title: product.title,
@@ -36,29 +33,27 @@ orderSchema.statics.generateOrderProduct = (product) => {
     };
 };
 
-orderSchema.virtual('totalExVat')
+Order.virtual('totalExVat')
     .get(function () {
         return this.products.reduce((total, current) => total + (current.amount * current.unitPrice), 0);
     })
     .set(function () {
     });
-orderSchema.virtual('totalVat')
+Order.virtual('totalVat')
     .get(function () {
         return this.products.reduce((total, current) => total + _.round((current.amount * current.unitPrice) * (current.vatPercentage / 100), 2), 0);
     })
     .set(function () {
     });
 
-orderSchema.pre('validate', function(next) {
+Order.pre('validate', function (next) {
     const order = this;
 
     const isPureDigital = order.products.reduce((val, cur) => val && cur.digital, true);
-    if(!isPureDigital && !order.shippingAddress)
+    if (!isPureDigital && !order.shippingAddress)
         return next(new Error('A shipping address is required'));
     return next();
 });
 
-
-const Order = new MongoSchema('Order', orderSchema);
 
 module.exports = Order;
